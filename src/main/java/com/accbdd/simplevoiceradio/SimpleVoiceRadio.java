@@ -1,5 +1,7 @@
 package com.accbdd.simplevoiceradio;
 
+import java.util.ServiceLoader;
+
 import org.slf4j.Logger;
 
 import com.accbdd.simplevoiceradio.item.RadioItem;
@@ -27,6 +29,7 @@ public class SimpleVoiceRadio {
         SoundRegistry.register(modEventBus);
 
         modEventBus.addListener(this::setup);
+        ForgeLoader.loadPackets();
 
         MinecraftForge.EVENT_BUS.register(this);
     }
@@ -38,6 +41,17 @@ public class SimpleVoiceRadio {
     @SubscribeEvent
     public void onServerStarting(ServerStartingEvent event) {
         LOGGER.info("Server starting");
+    }
+
+    public static <T> T loadService(Class<T> clazz) {
+        final T loadedService = ServiceLoader.load(clazz)
+            .findFirst()
+            .orElseThrow(() -> new NullPointerException("Failed to load service for " + clazz.getName()));
+        return loadedService;
+    }
+
+    public static void error(Object object, Object... substitutions) {
+        LOGGER.error(String.valueOf(object), substitutions);
     }
 
 }

@@ -1,16 +1,30 @@
 package com.accbdd.simplevoiceradio.item;
 
-import com.accbdd.simplevoiceradio.SimpleVoiceRadio;
-import com.accbdd.simplevoiceradio.registry.SoundRegistry;
+import java.util.List;
+import java.util.UUID;
 
+import javax.annotation.Nullable;
+
+import com.accbdd.simplevoiceradio.SimpleVoiceRadio;
+import com.accbdd.simplevoiceradio.networking.packets.ClientboundRadioPacket;
+import com.accbdd.simplevoiceradio.radio.Frequency;
+import com.accbdd.simplevoiceradio.registry.SoundRegistry;
+import com.accbdd.simplevoiceradio.services.Services;
+
+import net.minecraft.ChatFormatting;
+import net.minecraft.nbt.CompoundTag;
+import net.minecraft.network.chat.Component;
+import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResultHolder;
+import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.CreativeModeTab;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.TooltipFlag;
 import net.minecraft.world.item.UseAnim;
 import net.minecraft.world.level.Level;
 import net.minecraftforge.eventbus.api.IEventBus;
@@ -35,6 +49,59 @@ public class RadioItem extends Item {
         super(properties);
     }
 
+    private void transmit(ServerPlayer player, boolean started) {
+        Services.NETWORKING.sendToPlayer(player, new ClientboundRadioPacket(started, player.getUUID()));
+    }
+
+    private CompoundTag setFrequency(ItemStack stack, Player player, String frequencyName, Frequency.Modulation modulation) {
+        CompoundTag tag = stack.getOrCreateTag();
+
+        String oldFrequencyName = tag.getString("frequency");
+        if (!oldFrequencyName.equals("")) {
+            Frequency oldFrequency = Frequency.getOrCreateFrequency(oldFrequencyName, modulation);
+            oldFrequency.removeListener(player);
+        }
+
+        tag.putString("frequency", frequencyName);
+        tag.putString("modulation", modulation.shorthand);
+
+        Frequency frequency = Frequency.getOrCreateFrequency(frequencyName, modulation);
+        frequency.addListener(player);
+
+        return tag;
+    }
+
+    @Override
+    public void inventoryTick(ItemStack stack, Level level, Entity entity, int slot, boolean b) {
+        super.inventoryTick(stack, level, entity, slot, b);
+
+        if (entity instanceof Player player && !level.isClientSide) {
+            CompoundTag tag = stack.getOrCreateTag();
+
+            UUID playerUUID = player.getUUID();
+            if (tag.contains("user")) {
+                UUID currentUUID = tag.getUUID("user");
+
+                if (currentUUID.equals(playerUUID)) return;
+            }
+
+            //setFrequency(stack, player, String.format("%03d", RANDOM.nextInt(0, 999))+"."+String.format("%02d", RANDOM.nextInt(0, 99)));
+            setFrequency(stack, player, "000.00", Frequency.Modulation.FREQUENCY);
+            tag.putUUID("user", playerUUID);
+        }
+    }
+
+    @Override
+    public void appendHoverText(ItemStack stack, @Nullable Level level, List<Component> components, TooltipFlag tooltip) {
+        CompoundTag tag = stack.getOrCreateTag();
+
+        components.add(Component.literal(
+                tag.getString("frequency") + tag.getString("modulation")
+        ).withStyle(ChatFormatting.DARK_GRAY));
+
+        super.appendHoverText(stack, level, components, tooltip);
+    }
+
     @Override
     public InteractionResultHolder<ItemStack> use(Level level, Player player, InteractionHand hand) {
         ItemStack stack = player.getItemInHand(hand);
@@ -45,6 +112,12 @@ public class RadioItem extends Item {
             1f,1f
         );
         player.startUsingItem(hand);
+
+        //send started using packet
+        if (!level.isClientSide) {
+            transmit((ServerPlayer) player, true);
+        }
+
         return InteractionResultHolder.consume(stack);
     }
 
@@ -60,12 +133,22 @@ public class RadioItem extends Item {
 
     @Override
     public void releaseUsing(ItemStack stack, Level level, LivingEntity user, int remainingUseTicks) {
-        level.playSound(
-            null, user.blockPosition(),
-            SoundRegistry.RADIO_CLOSE.get(),
-            SoundSource.PLAYERS,
-            1f,1f
-        );
+        if (user instanceof Player player) {
+            level.playSound(
+                null, user.blockPosition(),
+                SoundRegistry.RADIO_CLOSE.get(),
+                SoundSource.PLAYERS,
+                1f,1f
+            );
+
+            // Send stopped using packet
+            if (!level.isClientSide) {
+                transmit((ServerPlayer) player, false);
+            }
+
+            player.getCooldowns().addCooldown(this, 10);
+        }
+
         super.releaseUsing(stack, level, user, remainingUseTicks);
     }
 }
