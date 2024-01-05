@@ -2,6 +2,7 @@ package com.accbdd.simplevoiceradio.radio;
 
 import java.util.UUID;
 
+import com.accbdd.simplevoiceradio.SimpleVoiceRadio;
 import com.accbdd.simplevoiceradio.item.RadioItem;
 
 import de.maxhenkel.voicechat.api.VoicechatConnection;
@@ -38,9 +39,13 @@ public class RadioManager {
     }
 
     private void transmit(ServerLevel serverLevel, Frequency frequency, UUID sender, Vec3 senderLocation, byte[] opusEncodedData) {
+        SimpleVoiceRadio.LOGGER.info(String.format("starting transmit to %s listeners",frequency.listeners.size()));
         for (RadioChannel channel : frequency.listeners) {
-            if (sender.equals(channel.owner)) continue;
-
+            if (sender.equals(channel.owner)) {
+                SimpleVoiceRadio.LOGGER.info("sending packet on: " + frequency.frequency);
+                SimpleVoiceRadio.LOGGER.info("sending packet to: " + channel.owner);
+                SimpleVoiceRadio.LOGGER.info("packet data: " + opusEncodedData);
+            }
             channel.transmit(sender, senderLocation, opusEncodedData);
         }
     }

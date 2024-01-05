@@ -12,6 +12,7 @@ import javax.imageio.ImageIO;
 
 import com.accbdd.simplevoiceradio.radio.RadioManager;
 
+import de.maxhenkel.voicechat.api.ForgeVoicechatPlugin;
 import de.maxhenkel.voicechat.api.VoicechatPlugin;
 import de.maxhenkel.voicechat.api.VoicechatServerApi;
 import de.maxhenkel.voicechat.api.VolumeCategory;
@@ -19,6 +20,7 @@ import de.maxhenkel.voicechat.api.events.EventRegistration;
 import de.maxhenkel.voicechat.api.events.MicrophonePacketEvent;
 import de.maxhenkel.voicechat.api.events.VoicechatServerStartedEvent;
 
+@ForgeVoicechatPlugin
 public class SimpleVoiceRadioPlugin implements VoicechatPlugin {
     @Nullable
     public static VoicechatServerApi serverApi;
