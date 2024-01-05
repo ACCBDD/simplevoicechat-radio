@@ -1,27 +1,36 @@
-package com.example.examplemod;
+package com.accbdd.simplevoiceradio;
 
+import org.slf4j.Logger;
+
+import com.accbdd.simplevoiceradio.item.RadioItems;
 import com.mojang.logging.LogUtils;
+
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.event.server.ServerStartingEvent;
+import net.minecraftforge.eventbus.api.IEventBus;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.event.lifecycle.FMLCommonSetupEvent;
 import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
-import org.slf4j.Logger;
 
-@Mod(ExampleMod.MOD_ID)
-public class ExampleMod {
+@Mod(SimpleVoiceRadio.MOD_ID)
+public class SimpleVoiceRadio {
 
-    public static final String MOD_ID = "example_mod";
+    public static final String MOD_ID = "simplevoiceradio";
     public static final Logger LOGGER = LogUtils.getLogger();
 
-    public ExampleMod() {
-        FMLJavaModLoadingContext.get().getModEventBus().addListener(this::setup);
+    public SimpleVoiceRadio() {
+        IEventBus modEventBus = FMLJavaModLoadingContext.get().getModEventBus();
+
+        RadioItems.register(modEventBus);
+
+        modEventBus.addListener(this::setup);
+
         MinecraftForge.EVENT_BUS.register(this);
     }
 
     private void setup(FMLCommonSetupEvent event) {
-        LOGGER.info("Setting up example mod");
+        LOGGER.info("Setting up Simple Voice Radio");
     }
 
     @SubscribeEvent
