@@ -1,11 +1,10 @@
 package com.accbdd.simplevoiceradio;
 
 import java.util.List;
-import java.util.UUID;
 
 import javax.annotation.Nullable;
 
-import com.accbdd.simplevoiceradio.item.RadioItems;
+import com.accbdd.simplevoiceradio.item.RadioItem;
 
 import de.maxhenkel.voicechat.api.ForgeVoicechatPlugin;
 import de.maxhenkel.voicechat.api.ServerPlayer;
@@ -16,19 +15,22 @@ import de.maxhenkel.voicechat.api.VoicechatServerApi;
 import de.maxhenkel.voicechat.api.events.EventRegistration;
 import de.maxhenkel.voicechat.api.events.MicrophonePacketEvent;
 import de.maxhenkel.voicechat.api.events.VoicechatServerStartedEvent;
+import de.maxhenkel.voicechat.api.opus.OpusDecoder;
+import de.maxhenkel.voicechat.api.opus.OpusEncoder;
 import de.maxhenkel.voicechat.api.packets.MicrophonePacket;
-import net.minecraft.client.particle.CampfireSmokeParticle.SignalProvider;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
-import net.minecraftforge.client.model.IModelBuilder.Simple;
+
 
 @ForgeVoicechatPlugin
 public class SimpleVoiceRadioPlugin implements VoicechatPlugin {
+    
     public static VoicechatApi voicechatApi;
     @Nullable
     public static VoicechatServerApi voicechatServerApi;
+
     /**
      * @return the unique ID for this voice chat plugin
      */
@@ -60,11 +62,21 @@ public class SimpleVoiceRadioPlugin implements VoicechatPlugin {
         registration.registerEvent(VoicechatServerStartedEvent.class, this::onServerStarted);
     }
 
+    /**
+     * Gets the server api for voice chat.
+     * 
+     * @param event the server started event
+     */
     private void onServerStarted(VoicechatServerStartedEvent event) {
         voicechatServerApi = event.getVoicechat();
         SimpleVoiceRadio.LOGGER.info("Simple Voice Radio server initialized!");
     }
 
+    /**
+     * Called when any microphone packet is sent to the server. 
+     * 
+     * @param event the mic packet event
+     */
     public void onMicPacket(MicrophonePacketEvent event) {
         VoicechatConnection connection = event.getSenderConnection();
 
@@ -77,8 +89,12 @@ public class SimpleVoiceRadioPlugin implements VoicechatPlugin {
         MicrophonePacket packet = event.getPacket();
         ServerPlayer sendingPlayer = connection.getPlayer();
         Player forgePlayer = (Player) sendingPlayer.getPlayer();
+
+        if (!forgePlayer.getUseItem().getItem().equals(RadioItem.RADIO_ITEM.get())) {
+            return;
+        }
         
-        if (event.getPacket().getOpusEncodedData().length <= 0) {
+        if (packet.getOpusEncodedData().length <= 0) {
             SimpleVoiceRadio.LOGGER.info("0 length packet");
             return;
         }
@@ -92,29 +108,47 @@ public class SimpleVoiceRadioPlugin implements VoicechatPlugin {
             SimpleVoiceRadio.LOGGER.warn("Recieved mic packet from non-player - do you have an addon that generates these?");
             return;
         }
-        
-        if(!(forgePlayer.getItemInHand(InteractionHand.MAIN_HAND).getItem().equals(RadioItems.RADIO_ITEM.get())) && !(forgePlayer.getItemInHand(InteractionHand.OFF_HAND).getItem().equals(RadioItems.RADIO_ITEM.get()))) {
-            //TODO: implement curio support
-            return;
-        }
-        
-        //SimpleVoiceRadio.LOGGER.info(packet.getOpusEncodedData().toString());
+
+        OpusDecoder decoder = voicechatApi.createDecoder();
+        OpusEncoder encoder = voicechatApi.createEncoder();
+
+        byte[] crunchedPacket = encoder.encode(lowQuality(decoder.decode(packet.getOpusEncodedData())));
 
         MinecraftServer server = forgePlayer.level.getServer();
         List<net.minecraft.server.level.ServerPlayer> players = server.getPlayerList().getPlayers();
         for (net.minecraft.server.level.ServerPlayer player : players) {
             Player recievingForgePlayer = (Player) player;
-            if (recievingForgePlayer == (Player) sendingPlayer.getPlayer())
+            SimpleVoiceRadio.LOGGER.info("sending to: " + recievingForgePlayer.getEyePosition());
+            if (recievingForgePlayer.getUUID() == ((Player) sendingPlayer.getPlayer()).getUUID()) {
                 return;
+            }
+
             VoicechatConnection recievingConnection = voicechatServerApi.getConnectionOf(player.getUUID());
-            ServerPlayer recievingPlayer = recievingConnection.getPlayer();
-            if (!recievingForgePlayer.getInventory().contains(new ItemStack(RadioItems.RADIO_ITEM.get()))) {
+            if (!recievingForgePlayer.getInventory().contains(new ItemStack(RadioItem.RADIO_ITEM.get()))) {
                 //cancel generating static packet if reciever doesn't have a radio in their inventory
                 SimpleVoiceRadio.LOGGER.info("no radio on reciever");
                 return;
             }
             //generate a static sound packet
-            voicechatServerApi.sendStaticSoundPacketTo(recievingConnection, packet.staticSoundPacketBuilder().build());
+            voicechatServerApi.sendStaticSoundPacketTo(recievingConnection, packet.staticSoundPacketBuilder().opusEncodedData(crunchedPacket).build());
         }
+    }
+
+    //thank you to max henkel for audio filters!
+    public short[] lowQuality(short[] audio) {
+        int reduction = 4;
+        
+        short[] result = new short[audio.length];
+        for (int i = 0; i < audio.length; i += reduction) {
+            int sum = 0;
+            for (int j = 0; j < reduction; j++) {
+                sum += audio[i + j];
+            }
+            int avg = sum / reduction;
+            for (int j = 0; j < reduction; j++) {
+                result[i + j] = (short) avg;
+            }
+        }
+        return result;
     }
 }

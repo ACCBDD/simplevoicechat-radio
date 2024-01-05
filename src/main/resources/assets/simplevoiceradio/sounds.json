@@ -1,0 +1,10 @@
+{
+    "radio_open": {
+        "subtitle": "simplevoiceradio.subtitle.open_radio",
+        "sounds": [ "simplevoiceradio:radio_open" ]
+    },
+    "radio_close": {
+        "subtitle": "simplevoiceradio.subtitle.close_radio",
+        "sounds": [ "simplevoiceradio:radio_close" ]
+    }
+}

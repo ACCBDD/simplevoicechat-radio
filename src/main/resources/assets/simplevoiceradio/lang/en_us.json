@@ -1,3 +1,5 @@
 {
-    "item.simplevoiceradio.radio_item": "Handheld Radio"
+    "item.simplevoiceradio.radio_item": "Handheld Radio",
+    "simplevoiceradio.subtitle.open_radio" : "Radio activated",
+    "simplevoiceradio.subtitle.close_radio" : "Radio deactivated"
 }

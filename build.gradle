@@ -15,7 +15,7 @@ plugins {
 apply plugin: 'net.minecraftforge.gradle'
 
 base.archivesName = 'simplevoiceradio'
-version = '1.19.2-1.0.0.1'
+version = '1.19.2-1.0.2.0'
 group = 'com.accbdd'
 
 java.toolchain.languageVersion = JavaLanguageVersion.of(17)
@@ -68,6 +68,8 @@ dependencies {
     implementation 'com.google.code.findbugs:jsr305:3.0.2'
 
     implementation "de.maxhenkel.voicechat:voicechat-api:2.4.0"
+
+    implementation "de.maxhenkel.opus4j:opus4j:2.0.2"
 
     runtimeOnly fg.deobf("maven.modrinth:simple-voice-chat:forge-${voicechat_dependency}")
 }

@@ -2,7 +2,8 @@ package com.accbdd.simplevoiceradio;
 
 import org.slf4j.Logger;
 
-import com.accbdd.simplevoiceradio.item.RadioItems;
+import com.accbdd.simplevoiceradio.item.RadioItem;
+import com.accbdd.simplevoiceradio.registry.SoundRegistry;
 import com.mojang.logging.LogUtils;
 
 import net.minecraftforge.common.MinecraftForge;
@@ -22,7 +23,8 @@ public class SimpleVoiceRadio {
     public SimpleVoiceRadio() {
         IEventBus modEventBus = FMLJavaModLoadingContext.get().getModEventBus();
 
-        RadioItems.register(modEventBus);
+        RadioItem.register(modEventBus);
+        SoundRegistry.register(modEventBus);
 
         modEventBus.addListener(this::setup);
 
