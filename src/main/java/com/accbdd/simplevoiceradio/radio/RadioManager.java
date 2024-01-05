@@ -40,6 +40,7 @@ public class RadioManager {
 
     private void transmit(ServerLevel serverLevel, Frequency frequency, UUID sender, Vec3 senderLocation, byte[] opusEncodedData) {
         SimpleVoiceRadio.LOGGER.info(String.format("starting transmit to %s listeners",frequency.listeners.size()));
+        SimpleVoiceRadio.LOGGER.info("sending packet on: " + frequency.frequency);
         for (RadioChannel channel : frequency.listeners) {
             if (sender.equals(channel.owner)) {
                 SimpleVoiceRadio.LOGGER.info("sending packet on: " + frequency.frequency);

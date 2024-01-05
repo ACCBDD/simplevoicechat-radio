@@ -76,7 +76,7 @@ public class SimpleVoiceRadioPlugin implements VoicechatPlugin {
         serverApi = event.getVoicechat();
 
         radios = serverApi.volumeCategoryBuilder()
-            .setId(SimpleVoiceRadio.MOD_ID)
+            .setId("radios")
             .setName("Radios")
             .setDescription("The volume of radios")
             .setIcon(getIcon("radio_icon.png"))

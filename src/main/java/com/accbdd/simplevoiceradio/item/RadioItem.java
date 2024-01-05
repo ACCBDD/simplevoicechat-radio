@@ -67,6 +67,7 @@ public class RadioItem extends Item {
 
         Frequency frequency = Frequency.getOrCreateFrequency(frequencyName, modulation);
         frequency.addListener(player);
+        SimpleVoiceRadio.LOGGER.info("added %s to frequency %s",player.getName(),frequencyName);
 
         return tag;
     }
@@ -74,7 +75,7 @@ public class RadioItem extends Item {
     @Override
     public void inventoryTick(ItemStack stack, Level level, Entity entity, int slot, boolean b) {
         super.inventoryTick(stack, level, entity, slot, b);
-
+        SimpleVoiceRadio.LOGGER.info("inventorytick");
         if (entity instanceof Player player && !level.isClientSide) {
             CompoundTag tag = stack.getOrCreateTag();
 
