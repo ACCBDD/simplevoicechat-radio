@@ -4,6 +4,10 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 
+import javax.annotation.Nullable;
+
+import com.accbdd.simplevoiceradio.SimpleVoiceRadio;
+
 import net.minecraft.world.entity.player.Player;
 
 public class Frequency {
@@ -22,8 +26,6 @@ public class Frequency {
 
     private static final int FREQUENCY_WHOLE_PLACES = 3;
     private static final int FREQUENCY_DECIMAL_PLACES = 2;
-    private static final int FREQUENCY_DIGITS = FREQUENCY_WHOLE_PLACES+FREQUENCY_DECIMAL_PLACES;
-    private static final int MAX_FREQUENCY = (int) java.lang.Math.pow(10, FREQUENCY_DIGITS);
     private static final String FREQUENCY_PATTERN = "^\\d{"+FREQUENCY_WHOLE_PLACES+"}.\\d{"+FREQUENCY_DECIMAL_PLACES+"}$";
 
     public final Modulation modulation;
@@ -61,9 +63,30 @@ public class Frequency {
         return -1;
     }
 
-    public void addListener(Player player) {
-        RadioChannel channel = new RadioChannel(player);
+    public RadioChannel getChannel(UUID player) {
+        for (RadioChannel listener : listeners)
+            if (listener.owner.equals(player)) return listener;
+
+        return null;
+    }
+
+    public RadioChannel getChannel(Player player) {
+        return getChannel(player.getUUID());
+    }
+
+    @Nullable
+    public RadioChannel tryAddListener(UUID owner) {
+        if (getChannel(owner) == null)
+            return addListener(owner);
+
+        return null;
+    }
+    
+    public RadioChannel addListener(UUID owner) {
+        RadioChannel channel = new RadioChannel(owner);
         listeners.add(channel);
+        SimpleVoiceRadio.LOGGER.info("added %s to frequency %s", owner, this.frequency);
+        return channel;
     }
 
     public void removeListener(Player player) {
@@ -71,6 +94,8 @@ public class Frequency {
     }
     public void removeListener(UUID player) {
         listeners.removeIf(channel -> channel.owner.equals(player));
+
+        SimpleVoiceRadio.LOGGER.info("removed %s from frequency %s", player, this.frequency);
 
         if (listeners.size() == 0)
             frequencies.remove(this);
@@ -80,6 +105,7 @@ public class Frequency {
         int index = getFrequency(frequency, modulation);
         if (index != -1) return frequencies.get(index);
 
+        SimpleVoiceRadio.LOGGER.info("created frequency " + frequency);
         return new Frequency(frequency, modulation);
     }
 }

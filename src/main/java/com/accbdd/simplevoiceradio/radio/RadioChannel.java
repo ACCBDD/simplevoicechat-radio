@@ -9,7 +9,7 @@ import java.util.function.Supplier;
 
 import com.accbdd.simplevoiceradio.SimpleVoiceRadioPlugin;
 import com.accbdd.simplevoiceradio.effect.AudioEffect;
-import com.accbdd.simplevoiceradio.effect.LowQualityEffect;
+import com.accbdd.simplevoiceradio.effect.IntermittentEffect;
 
 import de.maxhenkel.voicechat.api.VoicechatConnection;
 import de.maxhenkel.voicechat.api.audiochannel.AudioPlayer;
@@ -26,11 +26,14 @@ public class RadioChannel implements Supplier<short[]> {
     private final AudioEffect effect;
 
     public RadioChannel(Player owner) {
-        this.owner = owner.getUUID();
+        this(owner.getUUID());
+    }
+    public RadioChannel(UUID owner) {
+        this.owner = owner;
 
         packetBuffer = new HashMap<>();
         decoders = new HashMap<>();
-        effect = new LowQualityEffect();
+        effect = new IntermittentEffect();
     }
 
     @Override
@@ -82,7 +85,7 @@ public class RadioChannel implements Supplier<short[]> {
         }
         microphonePackets.add(decoder.decode(data));
 
-        effect.severity = 5;
+        this.effect.severity = 5;
 
         if (audioPlayer == null) {
             getAudioPlayer().startPlaying();

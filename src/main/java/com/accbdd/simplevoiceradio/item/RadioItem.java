@@ -8,6 +8,7 @@ import javax.annotation.Nullable;
 import com.accbdd.simplevoiceradio.SimpleVoiceRadio;
 import com.accbdd.simplevoiceradio.networking.packets.ClientboundRadioPacket;
 import com.accbdd.simplevoiceradio.radio.Frequency;
+import com.accbdd.simplevoiceradio.radio.RadioEnabled;
 import com.accbdd.simplevoiceradio.registry.SoundRegistry;
 import com.accbdd.simplevoiceradio.services.Services;
 
@@ -34,7 +35,7 @@ import net.minecraftforge.registries.RegistryObject;
 
     
 
-public class RadioItem extends Item {
+public class RadioItem extends Item implements RadioEnabled {
     public static final DeferredRegister<Item> ITEMS = 
         DeferredRegister.create(ForgeRegistries.ITEMS, SimpleVoiceRadio.MOD_ID);
 
@@ -53,43 +54,29 @@ public class RadioItem extends Item {
         Services.NETWORKING.sendToPlayer(player, new ClientboundRadioPacket(started, player.getUUID()));
     }
 
-    private CompoundTag setFrequency(ItemStack stack, Player player, String frequencyName, Frequency.Modulation modulation) {
-        CompoundTag tag = stack.getOrCreateTag();
-
-        String oldFrequencyName = tag.getString("frequency");
-        if (!oldFrequencyName.equals("")) {
-            Frequency oldFrequency = Frequency.getOrCreateFrequency(oldFrequencyName, modulation);
-            oldFrequency.removeListener(player);
-        }
-
-        tag.putString("frequency", frequencyName);
-        tag.putString("modulation", modulation.shorthand);
-
-        Frequency frequency = Frequency.getOrCreateFrequency(frequencyName, modulation);
-        frequency.addListener(player);
-        SimpleVoiceRadio.LOGGER.info("added %s to frequency %s",player.getName(),frequencyName);
-
-        return tag;
-    }
-
     @Override
     public void inventoryTick(ItemStack stack, Level level, Entity entity, int slot, boolean b) {
         super.inventoryTick(stack, level, entity, slot, b);
-        SimpleVoiceRadio.LOGGER.info("inventorytick");
+        tick(stack, level, entity);
+
         if (entity instanceof Player player && !level.isClientSide) {
             CompoundTag tag = stack.getOrCreateTag();
+
+            String frequency = tag.getString("frequency");
+            String modulation = tag.getString("modulation");
 
             UUID playerUUID = player.getUUID();
             if (tag.contains("user")) {
                 UUID currentUUID = tag.getUUID("user");
-
                 if (currentUUID.equals(playerUUID)) return;
+
+                stopListening(frequency, Frequency.modulationOf(modulation), currentUUID);
             }
 
-            //setFrequency(stack, player, String.format("%03d", RANDOM.nextInt(0, 999))+"."+String.format("%02d", RANDOM.nextInt(0, 99)));
-            setFrequency(stack, player, "000.00", Frequency.Modulation.FREQUENCY);
+            listen(frequency, Frequency.modulationOf(modulation), playerUUID);
             tag.putUUID("user", playerUUID);
         }
+
     }
 
     @Override
