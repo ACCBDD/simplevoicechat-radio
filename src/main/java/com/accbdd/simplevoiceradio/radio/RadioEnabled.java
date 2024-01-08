@@ -4,8 +4,6 @@ import java.util.List;
 import java.util.Random;
 import java.util.UUID;
 
-import com.accbdd.simplevoiceradio.SimpleVoiceRadio;
-
 import net.minecraft.ChatFormatting;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.chat.Component;
@@ -16,23 +14,29 @@ import net.minecraft.world.level.Level;
 public interface RadioEnabled {
     Random RANDOM = new Random();
 
-    default CompoundTag setFrequency(ItemStack stack, String frequencyName, Frequency.Modulation modulation) {
+    default CompoundTag setFrequency(ItemStack stack, String frequencyName) {
         CompoundTag tag = stack.getOrCreateTag();
 
         tag.putString("frequency", frequencyName);
-        tag.putString("modulation", modulation.shorthand);
 
         return tag;
     }
 
-    default RadioChannel listen(String frequencyName, Frequency.Modulation modulation, UUID owner) {
-        SimpleVoiceRadio.LOGGER.info("listen was pinged");
-        Frequency frequency = Frequency.getOrCreateFrequency(frequencyName, modulation);
+    default CompoundTag getFrequency(ItemStack stack, String frequencyName) {
+        CompoundTag tag = stack.getOrCreateTag();
+
+        tag.putString("frequency", frequencyName);
+
+        return tag;
+    }
+
+    default RadioChannel listen(String frequencyName, UUID owner) {
+        Frequency frequency = Frequency.getOrCreateFrequency(frequencyName);
         return frequency.tryAddListener(owner);
     }
 
-    default void stopListening(String frequencyName, Frequency.Modulation modulation, UUID owner) {
-        Frequency frequency = Frequency.getOrCreateFrequency(frequencyName, modulation);
+    default void stopListening(String frequencyName, UUID owner) {
+        Frequency frequency = Frequency.getOrCreateFrequency(frequencyName);
         frequency.removeListener(owner);
     }
 
@@ -41,8 +45,7 @@ public interface RadioEnabled {
         CompoundTag tag = stack.getOrCreateTag();
         if (!tag.contains("frequency") || tag.getString("frequency").isEmpty())
             setFrequency(stack,
-                    "000.00",
-                    Frequency.Modulation.FREQUENCY
+                    "000.00"
             );
     }
 
@@ -50,7 +53,7 @@ public interface RadioEnabled {
         CompoundTag tag = stack.getOrCreateTag();
 
         components.add(Component.literal(
-                tag.getString("frequency") + tag.getString("modulation")
+                tag.getString("frequency") + " kHz"
         ).withStyle(ChatFormatting.DARK_GRAY));
     }
 }
