@@ -85,7 +85,7 @@ public class Frequency {
     public RadioChannel addListener(UUID owner) {
         RadioChannel channel = new RadioChannel(owner);
         listeners.add(channel);
-        SimpleVoiceRadio.LOGGER.info("added %s to frequency %s", owner, this.frequency);
+        SimpleVoiceRadio.LOGGER.info(String.format("added %s to frequency %s", owner, this.frequency));
         return channel;
     }
 
@@ -95,7 +95,7 @@ public class Frequency {
     public void removeListener(UUID player) {
         listeners.removeIf(channel -> channel.owner.equals(player));
 
-        SimpleVoiceRadio.LOGGER.info("removed %s from frequency %s", player, this.frequency);
+        SimpleVoiceRadio.LOGGER.info(String.format("removed %s from frequency %s", player, this.frequency));
 
         if (listeners.size() == 0)
             frequencies.remove(this);

@@ -4,6 +4,8 @@ import java.util.List;
 import java.util.Random;
 import java.util.UUID;
 
+import com.accbdd.simplevoiceradio.SimpleVoiceRadio;
+
 import net.minecraft.ChatFormatting;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.chat.Component;
@@ -24,6 +26,7 @@ public interface RadioEnabled {
     }
 
     default RadioChannel listen(String frequencyName, Frequency.Modulation modulation, UUID owner) {
+        SimpleVoiceRadio.LOGGER.info("listen was pinged");
         Frequency frequency = Frequency.getOrCreateFrequency(frequencyName, modulation);
         return frequency.tryAddListener(owner);
     }
