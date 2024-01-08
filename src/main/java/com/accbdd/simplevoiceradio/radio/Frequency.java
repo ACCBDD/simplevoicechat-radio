@@ -85,8 +85,6 @@ public class Frequency {
     public static Frequency getOrCreateFrequency(String frequency) {
         int index = getFrequency(frequency);
         if (index != -1) return frequencies.get(index);
-
-        SimpleVoiceRadio.LOGGER.info("created frequency " + frequency);
         return new Frequency(frequency);
     }
 }

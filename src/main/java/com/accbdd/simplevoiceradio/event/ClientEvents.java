@@ -27,6 +27,8 @@ public class ClientEvents {
         public static void onClientSetup(FMLClientSetupEvent event) {
             ItemProperties.register(ItemRegistry.RADIO_ITEM.get(), new ResourceLocation("using"), 
                 (stack, level, entity, i) -> entity != null && entity.isUsingItem() && entity.getUseItem() == stack ? 1.0f : 0.0f);
+            
+            
         }
     }
 

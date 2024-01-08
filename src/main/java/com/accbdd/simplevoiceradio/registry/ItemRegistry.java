@@ -15,7 +15,7 @@ public class ItemRegistry {
         DeferredRegister.create(ForgeRegistries.ITEMS, SimpleVoiceRadio.MOD_ID);
 
     public static final RegistryObject<RadioItem> RADIO_ITEM = ITEMS.register("radio_item",
-        () -> new RadioItem(new Item.Properties().tab(CreativeModeTab.TAB_MISC)));
+        () -> new RadioItem(new Item.Properties().tab(CreativeModeTab.TAB_MISC).stacksTo(1)));
 
     public static void register(IEventBus eventBus) {
         ITEMS.register(eventBus);

@@ -1,19 +1,19 @@
 {
     "type": "minecraft:crafting_shaped",
     "pattern": [
-        "#R#",
+        "R#R",
         "L L",
         "L L"
     ],
     "key": {
         "#": {
-            "item": "minecraft:iron_nugget"
+            "item": "minecraft:iron_ingot"
         },
         "R": {
             "item": "minecraft:redstone_torch"
         },
         "L": {
-            "tag": "minecraft:planks"
+            "tag": "minecraft:sticks"
         }
     },
     "result": {

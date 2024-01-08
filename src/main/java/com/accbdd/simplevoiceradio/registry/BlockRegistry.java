@@ -3,6 +3,7 @@ package com.accbdd.simplevoiceradio.registry;
 import java.util.function.Supplier;
 
 import com.accbdd.simplevoiceradio.SimpleVoiceRadio;
+import com.accbdd.simplevoiceradio.registry.block.RadioWorkbench;
 
 import net.minecraft.world.item.BlockItem;
 import net.minecraft.world.item.CreativeModeTab;
@@ -20,8 +21,10 @@ public class BlockRegistry {
         DeferredRegister.create(ForgeRegistries.BLOCKS, SimpleVoiceRadio.MOD_ID);
 
     public static final RegistryObject<Block> RADIO_WORKBENCH = registerBlock("radio_workbench",
-        () -> new Block(BlockBehaviour.Properties.of(Material.WOOD)
-                .strength(2.5f)), CreativeModeTab.TAB_MISC);
+        () -> new RadioWorkbench(BlockBehaviour.Properties.of(Material.WOOD)
+                .strength(2.5f)
+                .noOcclusion()
+                .isViewBlocking((a,b,c) -> false)), CreativeModeTab.TAB_MISC);
 
     private static <T extends Block> RegistryObject<T> registerBlock(String name, Supplier<T> block, CreativeModeTab tab) {
         RegistryObject<T> toReturn = BLOCKS.register(name, block);
