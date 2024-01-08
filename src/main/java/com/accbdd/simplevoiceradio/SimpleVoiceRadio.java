@@ -3,6 +3,7 @@ package com.accbdd.simplevoiceradio;
 import org.slf4j.Logger;
 
 import com.accbdd.simplevoiceradio.item.RadioItem;
+import com.accbdd.simplevoiceradio.networking.NetworkingManager;
 import com.accbdd.simplevoiceradio.registry.SoundRegistry;
 import com.mojang.logging.LogUtils;
 
@@ -33,6 +34,7 @@ public class SimpleVoiceRadio {
 
     private void setup(FMLCommonSetupEvent event) {
         LOGGER.info("Setting up Simple Voice Radio");
+        NetworkingManager.register();
     }
 
     @SubscribeEvent
@@ -40,4 +42,7 @@ public class SimpleVoiceRadio {
         LOGGER.info("Server starting");
     }
 
+    public static void error(Object object, Object... substitutions) {
+        LOGGER.error(String.valueOf(object), substitutions);
+    }
 }
