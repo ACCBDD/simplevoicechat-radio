@@ -2,7 +2,6 @@ package com.accbdd.simplevoiceradio.radio;
 
 import java.util.UUID;
 
-import com.accbdd.simplevoiceradio.SimpleVoiceRadio;
 import com.accbdd.simplevoiceradio.radio.capability.PlayerTransmitFrequencyProvider;
 
 import de.maxhenkel.voicechat.api.VoicechatConnection;
@@ -10,7 +9,6 @@ import de.maxhenkel.voicechat.api.events.MicrophonePacketEvent;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.phys.Vec3;
-import net.minecraftforge.event.level.NoteBlockEvent.Play;
 
 public class RadioManager {
     private static RadioManager INSTANCE;

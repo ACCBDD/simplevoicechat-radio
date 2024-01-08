@@ -1,16 +1,12 @@
 package com.accbdd.simplevoiceradio.event;
 
-import java.util.UUID;
-
 import com.accbdd.simplevoiceradio.SimpleVoiceRadio;
 import com.accbdd.simplevoiceradio.item.RadioItem;
 import com.accbdd.simplevoiceradio.radio.Frequency;
 import com.accbdd.simplevoiceradio.radio.capability.PlayerTransmitFrequency;
 import com.accbdd.simplevoiceradio.radio.capability.PlayerTransmitFrequencyProvider;
 
-import net.minecraft.nbt.CompoundTag;
 import net.minecraft.resources.ResourceLocation;
-import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;

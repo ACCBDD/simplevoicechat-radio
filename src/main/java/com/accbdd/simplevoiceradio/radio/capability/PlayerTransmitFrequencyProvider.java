@@ -3,7 +3,6 @@ package com.accbdd.simplevoiceradio.radio.capability;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
-import cpw.mods.util.Lazy;
 import net.minecraft.core.Direction;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraftforge.common.capabilities.Capability;

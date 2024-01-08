@@ -8,7 +8,6 @@ import javax.annotation.Nullable;
 import com.accbdd.simplevoiceradio.SimpleVoiceRadio;
 import com.accbdd.simplevoiceradio.networking.NetworkingManager;
 import com.accbdd.simplevoiceradio.networking.packet.RadioTransmitPacket;
-import com.accbdd.simplevoiceradio.radio.Frequency;
 import com.accbdd.simplevoiceradio.radio.RadioEnabled;
 import com.accbdd.simplevoiceradio.registry.SoundRegistry;
 
