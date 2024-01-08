@@ -1,8 +1,8 @@
 package com.accbdd.simplevoiceradio.event;
 import com.accbdd.simplevoiceradio.SimpleVoiceRadio;
-import com.accbdd.simplevoiceradio.item.RadioItem;
 import com.accbdd.simplevoiceradio.networking.NetworkingManager;
 import com.accbdd.simplevoiceradio.networking.packet.RadioTransmitPacket;
+import com.accbdd.simplevoiceradio.registry.ItemRegistry;
 import com.accbdd.simplevoiceradio.util.KeyBinding;
 import com.mojang.blaze3d.platform.InputConstants;
 
@@ -25,7 +25,7 @@ public class ClientEvents {
 
         @SubscribeEvent
         public static void onClientSetup(FMLClientSetupEvent event) {
-            ItemProperties.register(RadioItem.RADIO_ITEM.get(), new ResourceLocation("using"), 
+            ItemProperties.register(ItemRegistry.RADIO_ITEM.get(), new ResourceLocation("using"), 
                 (stack, level, entity, i) -> entity != null && entity.isUsingItem() && entity.getUseItem() == stack ? 1.0f : 0.0f);
         }
     }

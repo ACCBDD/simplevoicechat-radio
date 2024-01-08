@@ -1,11 +1,10 @@
 package com.accbdd.simplevoiceradio.event;
 
 import com.accbdd.simplevoiceradio.SimpleVoiceRadio;
-import com.accbdd.simplevoiceradio.item.RadioItem;
 import com.accbdd.simplevoiceradio.radio.Frequency;
 import com.accbdd.simplevoiceradio.radio.capability.PlayerTransmitFrequency;
 import com.accbdd.simplevoiceradio.radio.capability.PlayerTransmitFrequencyProvider;
-
+import com.accbdd.simplevoiceradio.registry.ItemRegistry;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
@@ -50,7 +49,7 @@ public class ModEvents {
         Level level = event.getEntity().getLevel();
         ItemStack stack = event.getItem().getItem();
         if (!level.isClientSide) {
-            if (event.getEntity() instanceof Player player) {
+            if (event.getEntity() instanceof Player player && (stack.getItem() == ItemRegistry.RADIO_ITEM.get())) {
                 Frequency.getOrCreateFrequency(stack.getOrCreateTag().getString("frequency")).tryAddListener(player.getUUID());
             }
         }
@@ -60,7 +59,7 @@ public class ModEvents {
     public static void onPlayerLoggedInEvent(PlayerLoggedInEvent event) {
         Player player = event.getEntity();
         for (ItemStack item : player.getInventory().items) {
-            if (item.getItem() == RadioItem.RADIO_ITEM.get()) {
+            if (item.getItem() == ItemRegistry.RADIO_ITEM.get()) {
                 Frequency.getOrCreateFrequency(item.getOrCreateTag().getString("frequency")).tryAddListener(player.getUUID());
             }
         }

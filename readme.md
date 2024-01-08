@@ -1,5 +1,14 @@
-# Simple Voice Chat API Forge Mod Template
+# Simple Voice Radio
 
-This is an example template mod for the [Simple Voice Chat Plugin API](https://github.com/henkelmax/simple-voice-chat/blob/1.18.2/api/readme.md) for Forge.
+This is a simple handheld radio addon created for the [Dimensional Ascension modpack.](https://legacy.curseforge.com/minecraft/modpacks/dimensional-ascension)
+It is an addon for the [Simple Voice Chat](https://github.com/henkelmax/simple-voice-chat) mod.
 
-Feel free to use this for your projects.
+Use the keybind or right click with the radio in your hand to speak over a radio's frequency. The keybind will look for the first radio in your inventory, starting with your hotbar and then going left to right, top to bottom.
+
+If you want an updated or more feature-complete version of a radio mod, check out [CodinGlitch's Simple Radio](https://github.com/CodinGlitch/SimpleRadio) for 1.20.X.
+
+## Features
+- a handheld radio
+- a way to change that radio's frequency (eventually)
+- a keybind
+- curio support (eventually)

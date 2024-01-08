@@ -1,7 +1,8 @@
 {
     "item.simplevoiceradio.radio_item": "Handheld Radio",
-    "simplevoiceradio.subtitle.open_radio" : "Radio activated",
-    "simplevoiceradio.subtitle.close_radio" : "Radio deactivated",
-    "key.category.simplevoiceradio.radio" : "Simple Voice Radio",
-    "key.simplevoiceradio.activate_radio" : "Activate Radio"
+    "simplevoiceradio.subtitle.open_radio": "Radio activated",
+    "simplevoiceradio.subtitle.close_radio": "Radio deactivated",
+    "key.category.simplevoiceradio.radio": "Simple Voice Radio",
+    "key.simplevoiceradio.activate_radio": "Activate Radio",
+    "block.simplevoiceradio.radio_workbench": "Radio Workbench"
 }

@@ -3,10 +3,11 @@ package com.accbdd.simplevoiceradio.networking.packet;
 import java.util.function.Supplier;
 
 import com.accbdd.simplevoiceradio.SimpleVoiceRadio;
-import com.accbdd.simplevoiceradio.item.RadioItem;
 import com.accbdd.simplevoiceradio.networking.Packeter;
 import com.accbdd.simplevoiceradio.radio.capability.PlayerTransmitFrequencyProvider;
+import com.accbdd.simplevoiceradio.registry.ItemRegistry;
 import com.accbdd.simplevoiceradio.registry.SoundRegistry;
+import com.accbdd.simplevoiceradio.registry.item.RadioItem;
 
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.resources.ResourceLocation;
@@ -51,7 +52,7 @@ public record RadioTransmitPacket(boolean transmitting, Enum<RadioTransmitPacket
 
         context.enqueueWork(() -> {
             //we are on the server
-            RadioItem radioItem = RadioItem.RADIO_ITEM.get();
+            RadioItem radioItem = ItemRegistry.RADIO_ITEM.get();
             ServerPlayer player = context.getSender();
             ServerLevel level = player.getLevel();
             ItemStack radio = ((player.getItemInHand(InteractionHand.MAIN_HAND).getItem() == radioItem) ? player.getItemInHand(InteractionHand.MAIN_HAND) : player.getItemInHand(InteractionHand.OFF_HAND));

@@ -8,11 +8,11 @@ public class PlayerTransmitFrequency {
     public String frequencyName;
 
     public void clearFrequency() {
-        this.frequencyName = null;
+        this.frequencyName = "";
     }
 
     public Frequency getFrequency() {
-        return frequencyName == null ? null : Frequency.getOrCreateFrequency(frequencyName); 
+        return Frequency.getOrCreateFrequency(frequencyName); 
     }
 
     public void setFrequency(String frequencyName) {

@@ -1,0 +1,5 @@
+{
+    "variants": {
+        "": { "model": "simplevoiceradio:block/radio_workbench" }
+    }
+}
