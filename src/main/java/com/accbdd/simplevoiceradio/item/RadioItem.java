@@ -6,16 +6,15 @@ import java.util.UUID;
 import javax.annotation.Nullable;
 
 import com.accbdd.simplevoiceradio.SimpleVoiceRadio;
-import com.accbdd.simplevoiceradio.networking.packets.ClientboundRadioPacket;
+import com.accbdd.simplevoiceradio.networking.NetworkingManager;
+import com.accbdd.simplevoiceradio.networking.packet.RadioPacket;
 import com.accbdd.simplevoiceradio.radio.Frequency;
 import com.accbdd.simplevoiceradio.radio.RadioEnabled;
 import com.accbdd.simplevoiceradio.registry.SoundRegistry;
-import com.accbdd.simplevoiceradio.services.Services;
 
 import net.minecraft.ChatFormatting;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.chat.Component;
-import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResultHolder;
@@ -50,8 +49,8 @@ public class RadioItem extends Item implements RadioEnabled {
         super(properties);
     }
 
-    private void transmit(ServerPlayer player, boolean started) {
-        Services.NETWORKING.sendToPlayer(player, new ClientboundRadioPacket(started, player.getUUID()));
+    private void transmit(boolean started) {
+        NetworkingManager.sendToServer(new RadioPacket(started));
     }
 
     @Override
@@ -59,22 +58,36 @@ public class RadioItem extends Item implements RadioEnabled {
         super.inventoryTick(stack, level, entity, slot, b);
         tick(stack, level, entity);
 
-        if (entity instanceof Player player && !level.isClientSide) {
-            CompoundTag tag = stack.getOrCreateTag();
+        if (!level.isClientSide) {
+            if (entity instanceof Player player) {
 
-            String frequency = tag.getString("frequency");
-            String modulation = tag.getString("modulation");
+                CompoundTag tag = stack.getOrCreateTag();
+                String frequency = tag.getString("frequency");
+                String modulation = tag.getString("modulation");
 
-            UUID playerUUID = player.getUUID();
-            if (tag.contains("user")) {
-                UUID currentUUID = tag.getUUID("user");
-                if (currentUUID.equals(playerUUID)) return;
+                UUID playerUUID = player.getUUID();
+                if (tag.contains("user")) {
+                    UUID currentUUID = tag.getUUID("user");
+                    if (currentUUID.equals(playerUUID)) {
+                        return;
+                    }
 
-                stopListening(frequency, Frequency.modulationOf(modulation), currentUUID);
+                    stopListening(frequency, Frequency.modulationOf(modulation), currentUUID);
+                }
+
+                listen(frequency, Frequency.modulationOf(modulation), playerUUID);
+                tag.putUUID("user", playerUUID);
+            } else {
+                //no longer in a player's inventory, remove last held (current UUID) from listening
+                CompoundTag tag = stack.getOrCreateTag();
+                String frequency = tag.getString("frequency");
+                String modulation = tag.getString("modulation");
+                if (tag.contains("user")) {
+                    UUID currentUUID = tag.getUUID("user");
+                    stopListening(frequency, Frequency.modulationOf(modulation), currentUUID);
+                    tag.remove("user");
+                }
             }
-
-            listen(frequency, Frequency.modulationOf(modulation), playerUUID);
-            tag.putUUID("user", playerUUID);
         }
 
     }
@@ -101,9 +114,9 @@ public class RadioItem extends Item implements RadioEnabled {
         );
         player.startUsingItem(hand);
 
-        //send started using packet
-        if (!level.isClientSide) {
-            transmit((ServerPlayer) player, true);
+        //send started using packet to server
+        if (level.isClientSide) {
+            transmit(true);
         }
 
         return InteractionResultHolder.consume(stack);
@@ -129,9 +142,9 @@ public class RadioItem extends Item implements RadioEnabled {
                 1f,1f
             );
 
-            // Send stopped using packet
-            if (!level.isClientSide) {
-                transmit((ServerPlayer) player, false);
+            //send stopped using packet to server
+            if (level.isClientSide) {
+                transmit(false);
             }
 
             player.getCooldowns().addCooldown(this, 10);

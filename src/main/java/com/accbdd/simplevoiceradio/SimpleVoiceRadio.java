@@ -5,6 +5,7 @@ import java.util.ServiceLoader;
 import org.slf4j.Logger;
 
 import com.accbdd.simplevoiceradio.item.RadioItem;
+import com.accbdd.simplevoiceradio.networking.NetworkingManager;
 import com.accbdd.simplevoiceradio.registry.SoundRegistry;
 import com.mojang.logging.LogUtils;
 
@@ -29,13 +30,13 @@ public class SimpleVoiceRadio {
         SoundRegistry.register(modEventBus);
 
         modEventBus.addListener(this::setup);
-        ForgeLoader.loadPackets();
 
         MinecraftForge.EVENT_BUS.register(this);
     }
 
     private void setup(FMLCommonSetupEvent event) {
         LOGGER.info("Setting up Simple Voice Radio");
+        NetworkingManager.register();
     }
 
     @SubscribeEvent

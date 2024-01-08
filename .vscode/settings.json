@@ -1,4 +1,6 @@
+
 {
+    "editor.rulers": [120],
     "java.compile.nullAnalysis.mode": "automatic",
     "java.configuration.updateBuildConfiguration": "automatic"
 }
