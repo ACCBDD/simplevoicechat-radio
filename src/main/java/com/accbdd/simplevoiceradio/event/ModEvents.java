@@ -49,8 +49,8 @@ public class ModEvents {
         Level level = event.getEntity().getLevel();
         ItemStack stack = event.getItem().getItem();
         if (!level.isClientSide) {
-            if (event.getEntity() instanceof Player player && (stack.getItem() == ItemRegistry.RADIO_ITEM.get())) {
-                Frequency.getOrCreateFrequency(stack.getOrCreateTag().getString("frequency")).tryAddListener(player.getUUID());
+            if ((stack.getItem() == ItemRegistry.RADIO_ITEM.get())) {
+                Frequency.getOrCreateFrequency(stack.getOrCreateTag().getString("frequency")).tryAddListener(event.getEntity().getUUID());
             }
         }
     }

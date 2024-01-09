@@ -3,7 +3,6 @@ package com.accbdd.simplevoiceradio;
 import org.slf4j.Logger;
 
 import com.accbdd.simplevoiceradio.networking.NetworkingManager;
-import com.accbdd.simplevoiceradio.registry.BlockRegistry;
 import com.accbdd.simplevoiceradio.registry.ItemRegistry;
 import com.accbdd.simplevoiceradio.registry.SoundRegistry;
 import com.mojang.logging.LogUtils;
@@ -27,7 +26,6 @@ public class SimpleVoiceRadio {
 
         ItemRegistry.register(modEventBus);
         SoundRegistry.register(modEventBus);
-        BlockRegistry.register(modEventBus);
 
         modEventBus.addListener(this::setup);
 
