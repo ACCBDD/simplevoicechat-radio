@@ -31,6 +31,8 @@ minecraft {
                     source sourceSets.main
                 }
             }
+            property 'mixin.env.remapRefMap', 'true'
+            property 'mixin.env.refMapRemappingFile', "${projectDir}/build/createSrgToMcp/output.srg"
         }
 
         server {
@@ -40,6 +42,8 @@ minecraft {
                     source sourceSets.main
                 }
             }
+            property 'mixin.env.remapRefMap', 'true'
+            property 'mixin.env.refMapRemappingFile', "${projectDir}/build/createSrgToMcp/output.srg"
         }
     }
 }
@@ -59,6 +63,12 @@ repositories {
             includeGroup "maven.modrinth"
         }
     }
+    repositories {
+        maven {
+            name = "Illusive Soulworks maven"
+            url = "https://maven.theillusivec4.top/"
+        }
+    }
     mavenLocal()
 }
 
@@ -72,6 +82,10 @@ dependencies {
     implementation "de.maxhenkel.opus4j:opus4j:2.0.2"
 
     runtimeOnly fg.deobf("maven.modrinth:simple-voice-chat:forge-${voicechat_dependency}")
+
+
+    compileOnly(fg.deobf("top.theillusivec4.curios:curios-forge:${curios_version}:api"))
+    runtimeOnly(fg.deobf("top.theillusivec4.curios:curios-forge:${curios_version}"))
 }
 
 jar {

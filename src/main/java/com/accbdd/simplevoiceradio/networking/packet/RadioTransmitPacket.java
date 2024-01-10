@@ -16,7 +16,10 @@ import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.item.ItemStack;
+import net.minecraftforge.common.util.LazyOptional;
+import net.minecraftforge.items.IItemHandlerModifiable;
 import net.minecraftforge.network.NetworkEvent;
+import top.theillusivec4.curios.api.CuriosApi;
 
 //packet from client to server telling it that we are transmitting
 public record RadioTransmitPacket(boolean transmitting, Enum<RadioTransmitPacket.PacketContext> packetContext) implements Packeter {
@@ -57,13 +60,27 @@ public record RadioTransmitPacket(boolean transmitting, Enum<RadioTransmitPacket
             ServerLevel level = player.getLevel();
             ItemStack radio = ((player.getItemInHand(InteractionHand.MAIN_HAND).getItem() == radioItem) ? player.getItemInHand(InteractionHand.MAIN_HAND) : player.getItemInHand(InteractionHand.OFF_HAND));
             if (this.packetContext == PacketContext.KEYBIND) {
-                for (ItemStack item : player.getInventory().items) {
-                    if (item.getItem() == radioItem) {
-                        radio = item;
-                        break;
+                LazyOptional<IItemHandlerModifiable> curioInv = CuriosApi.getCuriosHelper().getEquippedCurios(player);
+                if (curioInv.resolve().isPresent()) {
+                    IItemHandlerModifiable handler = curioInv.resolve().get();
+                    for (int i = 0; i < handler.getSlots(); i++) {
+                        if (handler.getStackInSlot(i).getItem() == radioItem)
+                            radio = handler.getStackInSlot(i);
+                    }
+                }
+                if (radio.getItem() != radioItem) {
+                    for (ItemStack item : player.getInventory().items) {
+                        if (item.getItem() == radioItem) {
+                            radio = item;
+                            break;
+                        }
                     }
                 }
             }
+
+            if (radio.getItem() != radioItem)
+                return;
+
             String frequency = radio.getOrCreateTag().getString("frequency");
             if (start && !player.getCooldowns().isOnCooldown(radioItem)) {
                 player.getCapability(PlayerTransmitFrequencyProvider.PLAYER_TRANSMIT_FREQUENCY).ifPresent(freq -> {

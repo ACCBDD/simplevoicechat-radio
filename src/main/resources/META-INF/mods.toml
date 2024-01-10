@@ -29,3 +29,9 @@ A Simple Voice Chat Radio
     versionRange="[1.19.2-2.4.32,)"
     ordering="AFTER"
     side="BOTH"
+[[dependencies.simplevoiceradio]]
+    modId="curios"
+    mandatory=true
+    versionRange="[1.19.2-5.1.4.4,)"
+    ordering="AFTER"
+    side="BOTH"

@@ -25,8 +25,6 @@ import net.minecraft.world.item.TooltipFlag;
 import net.minecraft.world.item.UseAnim;
 import net.minecraft.world.level.Level;
 
-    
-
 public class RadioItem extends Item implements RadioEnabled {
     public RadioItem(Properties properties) {
         super(properties);
@@ -102,7 +100,7 @@ public class RadioItem extends Item implements RadioEnabled {
 
         components.add(Component.literal(
                 tag.getString("frequency") + " mHz"
-        ).withStyle(ChatFormatting.DARK_GRAY));
+        ).withStyle(ChatFormatting.GRAY));
 
         super.appendHoverText(stack, level, components, tooltip);
     }
