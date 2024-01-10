@@ -9,6 +9,6 @@ If you want an updated or more feature-complete version of a radio mod, check ou
 
 ## Features
 - a handheld radio
-- a way to change that radio's frequency (eventually)
-- a keybind
+- a way to change that radio's frequency
+- keybinds
 - curio support (eventually)
