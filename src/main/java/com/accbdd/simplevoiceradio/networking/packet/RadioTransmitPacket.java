@@ -61,7 +61,8 @@ public record RadioTransmitPacket(boolean transmitting, Enum<RadioTransmitPacket
             ServerLevel level = player.getLevel();
             ItemStack radio = ((player.getItemInHand(InteractionHand.MAIN_HAND).getItem() == radioItem) ? player.getItemInHand(InteractionHand.MAIN_HAND) : player.getItemInHand(InteractionHand.OFF_HAND));
             if (this.packetContext == PacketContext.KEYBIND) {
-                radio = CuriosApi.getCuriosHelper().findFirstCurio(player, radioItem).map(SlotResult::stack).orElse(ItemStack.EMPTY);
+                if (radio.getItem() != radioItem)
+                    radio = CuriosApi.getCuriosHelper().findFirstCurio(player, radioItem).map(SlotResult::stack).orElse(ItemStack.EMPTY);
                 if (radio.getItem() != radioItem) {
                     for (ItemStack item : player.getInventory().items) {
                         if (item.getItem() == radioItem) {
