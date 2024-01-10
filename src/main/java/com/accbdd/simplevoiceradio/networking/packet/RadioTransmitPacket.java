@@ -20,6 +20,7 @@ import net.minecraftforge.common.util.LazyOptional;
 import net.minecraftforge.items.IItemHandlerModifiable;
 import net.minecraftforge.network.NetworkEvent;
 import top.theillusivec4.curios.api.CuriosApi;
+import top.theillusivec4.curios.api.SlotResult;
 
 //packet from client to server telling it that we are transmitting
 public record RadioTransmitPacket(boolean transmitting, Enum<RadioTransmitPacket.PacketContext> packetContext) implements Packeter {
@@ -60,14 +61,7 @@ public record RadioTransmitPacket(boolean transmitting, Enum<RadioTransmitPacket
             ServerLevel level = player.getLevel();
             ItemStack radio = ((player.getItemInHand(InteractionHand.MAIN_HAND).getItem() == radioItem) ? player.getItemInHand(InteractionHand.MAIN_HAND) : player.getItemInHand(InteractionHand.OFF_HAND));
             if (this.packetContext == PacketContext.KEYBIND) {
-                LazyOptional<IItemHandlerModifiable> curioInv = CuriosApi.getCuriosHelper().getEquippedCurios(player);
-                if (curioInv.resolve().isPresent()) {
-                    IItemHandlerModifiable handler = curioInv.resolve().get();
-                    for (int i = 0; i < handler.getSlots(); i++) {
-                        if (handler.getStackInSlot(i).getItem() == radioItem)
-                            radio = handler.getStackInSlot(i);
-                    }
-                }
+                radio = CuriosApi.getCuriosHelper().findFirstCurio(player, radioItem).map(SlotResult::stack).orElse(ItemStack.EMPTY);
                 if (radio.getItem() != radioItem) {
                     for (ItemStack item : player.getInventory().items) {
                         if (item.getItem() == radioItem) {

@@ -4,12 +4,12 @@ license="MIT"
 [[mods]]
 modId="simplevoiceradio"
 version="1.19.2-1.0.0.0"
-displayName="Simple Voice Mod Radio"
+displayName="Super Simple Voice Radio"
 logoFile="icon.png"
 credits=""
 authors="ACCBDD"
 description='''
-A Simple Voice Chat Radio
+This is a simple handheld radio addon created for the Dimensional Ascension modpack. It is an addon for the Simple Voice Chat mod.
 '''
 [[dependencies.simplevoiceradio]]
     modId="forge"
