@@ -11,4 +11,4 @@ If you want an updated or more feature-complete version of a radio mod, check ou
 - a handheld radio
 - a way to change that radio's frequency
 - keybinds
-- curio support (eventually)
+- curio support
