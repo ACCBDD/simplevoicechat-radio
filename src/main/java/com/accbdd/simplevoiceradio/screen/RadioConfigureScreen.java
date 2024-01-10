@@ -1,24 +1,18 @@
 package com.accbdd.simplevoiceradio.screen;
 
 import net.minecraft.client.gui.components.AbstractButton;
-import net.minecraft.client.gui.components.Button;
 import net.minecraft.client.gui.narration.NarrationElementOutput;
 import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.network.chat.Component;
-import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.ItemStack;
 
-import com.accbdd.simplevoiceradio.SimpleVoiceRadio;
 import com.accbdd.simplevoiceradio.networking.NetworkingManager;
 import com.accbdd.simplevoiceradio.networking.packet.RadioConfigurePacket;
-import com.accbdd.simplevoiceradio.networking.packet.RadioTransmitPacket;
 import com.accbdd.simplevoiceradio.radio.Frequency;
 import com.mojang.blaze3d.vertex.PoseStack;
 
 public class RadioConfigureScreen extends Screen {
     private static final Component TITLE = Component.translatable("gui.simplevoiceradio.screen.radio_configure_screen_title");
-
-    private static final ResourceLocation BACKGROUND_TEXTURE = new ResourceLocation(SimpleVoiceRadio.MOD_ID, "textures/gui/config_background.png");
 
     private final int screenWidth, screenHeight;
     private int leftPos, topPos;
@@ -27,8 +21,6 @@ public class RadioConfigureScreen extends Screen {
 
     protected int holdingFor = 0;
     protected int increment = 0;
-
-    private ChangeButton incrementButton, decrementButton;
 
     public RadioConfigureScreen() {
         super(TITLE);
@@ -48,10 +40,10 @@ public class RadioConfigureScreen extends Screen {
         this.radio = this.minecraft.player.getMainHandItem();
         this.frequency = this.radio.getOrCreateTag().getString("frequency");
 
-        this.incrementButton = addRenderableWidget(
+        addRenderableWidget(
             new ChangeButton(this.leftPos, this.topPos, true, this)
         );
-        this.decrementButton = addRenderableWidget(
+        addRenderableWidget(
             new ChangeButton(this.leftPos, this.topPos + 20, false, this)
         );
     }

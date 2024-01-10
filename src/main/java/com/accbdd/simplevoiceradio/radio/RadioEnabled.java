@@ -45,7 +45,7 @@ public interface RadioEnabled {
         CompoundTag tag = stack.getOrCreateTag();
         if (!tag.contains("frequency") || tag.getString("frequency").isEmpty())
             setFrequency(stack,
-                    "000.00"
+                    "001.00"
             );
     }
 

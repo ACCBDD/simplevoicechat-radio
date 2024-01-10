@@ -5,7 +5,6 @@ import java.util.UUID;
 
 import javax.annotation.Nullable;
 
-import com.accbdd.simplevoiceradio.SimpleVoiceRadio;
 import com.accbdd.simplevoiceradio.networking.NetworkingManager;
 import com.accbdd.simplevoiceradio.networking.packet.RadioTransmitPacket;
 import com.accbdd.simplevoiceradio.radio.RadioEnabled;
@@ -25,7 +24,6 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.TooltipFlag;
 import net.minecraft.world.item.UseAnim;
 import net.minecraft.world.level.Level;
-import net.minecraftforge.client.model.IModelBuilder.Simple;
 
     
 
