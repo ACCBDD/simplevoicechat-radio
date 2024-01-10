@@ -1,6 +1,6 @@
 modLoader="javafml"
 loaderVersion="[43,)"
-license="MIT"
+license="Apache"
 [[mods]]
 modId="simplevoiceradio"
 version="1.19.2-1.3.0.1"
