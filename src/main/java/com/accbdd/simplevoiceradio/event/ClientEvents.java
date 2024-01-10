@@ -3,11 +3,14 @@ import com.accbdd.simplevoiceradio.SimpleVoiceRadio;
 import com.accbdd.simplevoiceradio.networking.NetworkingManager;
 import com.accbdd.simplevoiceradio.networking.packet.RadioTransmitPacket;
 import com.accbdd.simplevoiceradio.registry.ItemRegistry;
+import com.accbdd.simplevoiceradio.screen.RadioConfigureScreen;
 import com.accbdd.simplevoiceradio.util.KeyBinding;
 import com.mojang.blaze3d.platform.InputConstants;
 
+import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.item.ItemProperties;
 import net.minecraft.resources.ResourceLocation;
+import net.minecraft.world.item.Item;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.client.event.InputEvent;
 import net.minecraftforge.client.event.RegisterKeyMappingsEvent;
@@ -42,6 +45,16 @@ public class ClientEvents {
                 } else if(event.getAction() == InputConstants.RELEASE) {
                     NetworkingManager.sendToServer(new RadioTransmitPacket(false, RadioTransmitPacket.PacketContext.KEYBIND));
                 }
+            }
+
+            if(KeyBinding.CONFIGURE_RADIO_KEY.consumeClick()) {
+                Minecraft instance = Minecraft.getInstance();
+                if (instance == null)
+                    return;
+                Item useItem = instance.player.getMainHandItem().getItem();
+                if (useItem == ItemRegistry.RADIO_ITEM.get())
+                    Minecraft.getInstance().setScreen(new RadioConfigureScreen());
+                
             }
         }
     }

@@ -5,6 +5,7 @@ import java.util.UUID;
 
 import javax.annotation.Nullable;
 
+import com.accbdd.simplevoiceradio.SimpleVoiceRadio;
 import com.accbdd.simplevoiceradio.networking.NetworkingManager;
 import com.accbdd.simplevoiceradio.networking.packet.RadioTransmitPacket;
 import com.accbdd.simplevoiceradio.radio.RadioEnabled;
@@ -24,6 +25,7 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.TooltipFlag;
 import net.minecraft.world.item.UseAnim;
 import net.minecraft.world.level.Level;
+import net.minecraftforge.client.model.IModelBuilder.Simple;
 
     
 
@@ -42,12 +44,23 @@ public class RadioItem extends Item implements RadioEnabled {
         tick(stack, level, entity);
 
         if (!level.isClientSide) {
-            if (entity instanceof Player player) {
 
+            if (entity instanceof Player player) {
                 CompoundTag tag = stack.getOrCreateTag();
                 String frequency = tag.getString("frequency");
-
                 UUID playerUUID = player.getUUID();
+
+                //check if frequency has been changed
+                if (tag.contains("changeFrequency")) {
+                    String changeFreq = tag.getString("changeFrequency");
+                    if (!frequency.equals(changeFreq)) {
+                        stopListening(frequency, playerUUID);
+                        tag.remove("changeFrequency");
+                        tag.putString("frequency", changeFreq);
+                        listen(changeFreq, playerUUID);
+                    }
+                }
+                
                 if (tag.contains("user")) {
                     UUID currentUUID = tag.getUUID("user");
                     if (currentUUID.equals(playerUUID)) {

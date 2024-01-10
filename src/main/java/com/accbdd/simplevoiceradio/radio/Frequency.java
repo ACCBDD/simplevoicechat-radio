@@ -13,8 +13,10 @@ import net.minecraft.world.entity.player.Player;
 public class Frequency {
     private static final List<Frequency> frequencies = new ArrayList<>();
 
-    private static final int FREQUENCY_WHOLE_PLACES = 3;
-    private static final int FREQUENCY_DECIMAL_PLACES = 2;
+    public static final int FREQUENCY_WHOLE_PLACES = 3;
+    public static final int FREQUENCY_DECIMAL_PLACES = 2;
+    public static final int FREQUENCY_DIGITS = FREQUENCY_WHOLE_PLACES + FREQUENCY_DECIMAL_PLACES;
+    public static final int MAX_FREQUENCY = (int) Math.pow(10, FREQUENCY_DIGITS);
     private static final String FREQUENCY_PATTERN = "^\\d{"+FREQUENCY_WHOLE_PLACES+"}.\\d{"+FREQUENCY_DECIMAL_PLACES+"}$";
 
     public final String frequency;
@@ -86,5 +88,13 @@ public class Frequency {
         int index = getFrequency(frequency);
         if (index != -1) return frequencies.get(index);
         return new Frequency(frequency);
+    }
+
+    public static String incrementFrequency(String frequency, int amt) {
+        SimpleVoiceRadio.LOGGER.info("recieved {}, incrementing by {}", frequency, amt);
+        int convertedFrequency = Integer.parseInt(frequency.replaceAll("[.]", ""));
+        String str = String.format("%0"+FREQUENCY_DIGITS+"d", Math.max(0, Math.min(MAX_FREQUENCY - 1, convertedFrequency + amt)));
+        SimpleVoiceRadio.LOGGER.info("returning {}", str);
+        return new StringBuilder(str).insert(str.length() - FREQUENCY_DECIMAL_PLACES, ".").toString();
     }
 }

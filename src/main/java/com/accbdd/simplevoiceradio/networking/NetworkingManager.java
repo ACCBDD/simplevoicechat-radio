@@ -1,6 +1,7 @@
 package com.accbdd.simplevoiceradio.networking;
 
 import com.accbdd.simplevoiceradio.SimpleVoiceRadio;
+import com.accbdd.simplevoiceradio.networking.packet.RadioConfigurePacket;
 import com.accbdd.simplevoiceradio.networking.packet.RadioTransmitPacket;
 
 import net.minecraft.resources.ResourceLocation;
@@ -31,6 +32,12 @@ public class NetworkingManager {
             .decoder(RadioTransmitPacket::decode)
             .encoder(RadioTransmitPacket::encode)
             .consumerMainThread(RadioTransmitPacket::handle)
+            .add();
+        
+        net.messageBuilder(RadioConfigurePacket.class, id(), NetworkDirection.PLAY_TO_SERVER)
+            .decoder(RadioConfigurePacket::decode)
+            .encoder(RadioConfigurePacket::encode)
+            .consumerMainThread(RadioConfigurePacket::handle)
             .add();
     }
 

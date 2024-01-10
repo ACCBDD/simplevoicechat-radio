@@ -4,5 +4,6 @@
     "simplevoiceradio.subtitle.close_radio": "Radio deactivated",
     "key.category.simplevoiceradio.radio": "Simple Voice Radio",
     "key.simplevoiceradio.activate_radio": "Activate Radio",
-    "block.simplevoiceradio.radio_workbench": "Radio Workbench"
+    "block.simplevoiceradio.radio_workbench": "Radio Workbench",
+    "gui.simplevoiceradio.screen.radio_configure_screen_title": "Configure Radio"
 }

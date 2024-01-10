@@ -18,7 +18,7 @@ import net.minecraft.world.InteractionHand;
 import net.minecraft.world.item.ItemStack;
 import net.minecraftforge.network.NetworkEvent;
 
-//packet from client to server telling it that we are transmitting!
+//packet from client to server telling it that we are transmitting
 public record RadioTransmitPacket(boolean transmitting, Enum<RadioTransmitPacket.PacketContext> packetContext) implements Packeter {
     public enum PacketContext {
         ITEM("item"),
@@ -31,7 +31,7 @@ public record RadioTransmitPacket(boolean transmitting, Enum<RadioTransmitPacket
         }
     }
 
-    public static ResourceLocation ID = new ResourceLocation(SimpleVoiceRadio.MOD_ID, "radio_packet");
+    public static ResourceLocation ID = new ResourceLocation(SimpleVoiceRadio.MOD_ID, "radio_transmit_packet");
     @Override
     public ResourceLocation resource() {
         return ID;
