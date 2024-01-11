@@ -3,7 +3,7 @@ loaderVersion="[43,)"
 license="Apache"
 [[mods]]
 modId="simplevoiceradio"
-version="1.19.2-1.3.0.1"
+version="1.19.2-1.3.0.3"
 displayName="Super Simple Voice Radio"
 logoFile="icon.png"
 credits=""

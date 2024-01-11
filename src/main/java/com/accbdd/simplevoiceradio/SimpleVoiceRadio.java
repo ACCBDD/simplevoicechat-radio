@@ -45,7 +45,7 @@ public class SimpleVoiceRadio {
 
     private void enqueue(final InterModEnqueueEvent evt) {
         InterModComms.sendTo(CuriosApi.MODID, SlotTypeMessage.REGISTER_TYPE,
-            () -> SlotTypePreset.BACK.getMessageBuilder().build());
+            () -> SlotTypePreset.CURIO.getMessageBuilder().build());
     }
 
     @SubscribeEvent

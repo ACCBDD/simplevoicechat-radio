@@ -5,7 +5,7 @@ import com.accbdd.simplevoiceradio.radio.Frequency;
 import net.minecraft.nbt.CompoundTag;
 
 public class PlayerTransmitFrequency {
-    public String frequencyName;
+    public String frequencyName = "";
 
     public void clearFrequency() {
         this.frequencyName = "";
