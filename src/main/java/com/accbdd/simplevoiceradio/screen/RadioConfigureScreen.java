@@ -87,7 +87,7 @@ public class RadioConfigureScreen extends Screen {
         private RadioConfigureScreen screen;
 
         private ChangeButton(int x, int y, boolean isIncrement, RadioConfigureScreen screen) {
-            super(x, y, 20, 20, Component.literal(isIncrement ? "↑" : "↓"));
+            super(x, y, 20, 20, Component.literal(isIncrement ? "UP" : "DN"));
             this.isIncrement = isIncrement;
             this.screen = screen;
         }

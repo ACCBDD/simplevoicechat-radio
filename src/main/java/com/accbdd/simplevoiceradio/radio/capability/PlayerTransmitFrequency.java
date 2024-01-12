@@ -24,7 +24,7 @@ public class PlayerTransmitFrequency {
     }
 
     public void saveNBTData(CompoundTag nbt) {
-        nbt.putString("frequency", frequencyName);
+        nbt.putString("frequency", (frequencyName == null) ? "" : frequencyName);
     }
 
     public void loadNBTData(CompoundTag nbt) {
