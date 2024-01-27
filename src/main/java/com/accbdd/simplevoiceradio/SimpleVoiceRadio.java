@@ -12,7 +12,9 @@ import net.minecraftforge.event.server.ServerStartingEvent;
 import net.minecraftforge.eventbus.api.IEventBus;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.InterModComms;
+import net.minecraftforge.fml.ModLoadingContext;
 import net.minecraftforge.fml.common.Mod;
+import net.minecraftforge.fml.config.ModConfig.Type;
 import net.minecraftforge.fml.event.lifecycle.FMLCommonSetupEvent;
 import net.minecraftforge.fml.event.lifecycle.InterModEnqueueEvent;
 import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
@@ -31,6 +33,8 @@ public class SimpleVoiceRadio {
 
         ItemRegistry.register(modEventBus);
         SoundRegistry.register(modEventBus);
+
+        ModLoadingContext.get().registerConfig(Type.COMMON, SimpleVoiceRadioConfig.COMMON_CONFIG);
 
         modEventBus.addListener(this::setup);
         modEventBus.addListener(this::enqueue);

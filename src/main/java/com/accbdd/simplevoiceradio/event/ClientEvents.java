@@ -24,6 +24,7 @@ public class ClientEvents {
         @SubscribeEvent
         public static void onKeyRegister(RegisterKeyMappingsEvent event) {
             event.register(KeyBinding.ACTIVATE_RADIO_KEY);
+            event.register(KeyBinding.CONFIGURE_RADIO_KEY);
         }
 
         @SubscribeEvent
