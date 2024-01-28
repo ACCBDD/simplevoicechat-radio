@@ -5,6 +5,8 @@ import com.accbdd.simplevoiceradio.radio.Frequency;
 import com.accbdd.simplevoiceradio.radio.capability.PlayerTransmitFrequency;
 import com.accbdd.simplevoiceradio.radio.capability.PlayerTransmitFrequencyProvider;
 import com.accbdd.simplevoiceradio.registry.ItemRegistry;
+
+import net.minecraft.nbt.CompoundTag;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
@@ -50,7 +52,10 @@ public class ModEvents {
         ItemStack stack = event.getItem().getItem();
         if (!level.isClientSide) {
             if ((stack.getItem() == ItemRegistry.RADIO_ITEM.get())) {
-                Frequency.getOrCreateFrequency(stack.getOrCreateTag().getString("frequency")).tryAddListener(event.getEntity().getUUID());
+                CompoundTag tag = stack.getOrCreateTag();
+                if (!tag.contains("frequency") || tag.getString("frequency").isEmpty())
+                    tag.putString("frequency", "001.00");
+                Frequency.getOrCreateFrequency(tag.getString("frequency")).tryAddListener(event.getEntity().getUUID());
             }
         }
     }
