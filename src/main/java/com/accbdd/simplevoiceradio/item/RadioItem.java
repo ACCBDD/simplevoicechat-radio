@@ -40,10 +40,6 @@ public class RadioItem extends Item implements RadioEnabled {
         super.inventoryTick(stack, level, entity, slot, b);
         tick(stack, level, entity);
 
-        if (!entity.isAlive()) {
-            SimpleVoiceRadio.LOGGER.debug("player is dying");
-        }
-
         if (!level.isClientSide) {
             if (entity instanceof Player player) {
                 CompoundTag tag = stack.getOrCreateTag();
