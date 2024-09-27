@@ -5,7 +5,6 @@ import com.accbdd.simplevoiceradio.radio.Frequency;
 import com.accbdd.simplevoiceradio.radio.capability.PlayerTransmitFrequency;
 import com.accbdd.simplevoiceradio.radio.capability.PlayerTransmitFrequencyProvider;
 import com.accbdd.simplevoiceradio.registry.ItemRegistry;
-
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.player.Player;
@@ -33,11 +32,13 @@ public class ModEvents {
     @SubscribeEvent
     public static void onPlayerCloned(PlayerEvent.Clone event) {
         if (event.isWasDeath()) {
-            event.getOriginal().getCapability(PlayerTransmitFrequencyProvider.PLAYER_TRANSMIT_FREQUENCY).ifPresent(oldStore -> {
-                event.getOriginal().getCapability(PlayerTransmitFrequencyProvider.PLAYER_TRANSMIT_FREQUENCY).ifPresent(newStore -> {
-                    newStore.copyFrom(oldStore);
-                });
-            });
+            for (Frequency freq : Frequency.frequencies) {
+                freq.removeListener(event.getEntity());
+            }
+            event.getOriginal().getCapability(PlayerTransmitFrequencyProvider.PLAYER_TRANSMIT_FREQUENCY).ifPresent(oldStore -> event.getOriginal().getCapability(PlayerTransmitFrequencyProvider.PLAYER_TRANSMIT_FREQUENCY).ifPresent(newStore -> {
+                newStore.copyFrom(oldStore);
+                newStore.clearFrequency();
+            }));
         }
     }
 

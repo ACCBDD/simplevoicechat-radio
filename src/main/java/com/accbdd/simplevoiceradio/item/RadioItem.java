@@ -1,10 +1,11 @@
-package com.accbdd.simplevoiceradio.registry.item;
+package com.accbdd.simplevoiceradio.item;
 
 import java.util.List;
 import java.util.UUID;
 
 import javax.annotation.Nullable;
 
+import com.accbdd.simplevoiceradio.SimpleVoiceRadio;
 import com.accbdd.simplevoiceradio.networking.NetworkingManager;
 import com.accbdd.simplevoiceradio.networking.packet.RadioTransmitPacket;
 import com.accbdd.simplevoiceradio.radio.RadioEnabled;
@@ -39,8 +40,11 @@ public class RadioItem extends Item implements RadioEnabled {
         super.inventoryTick(stack, level, entity, slot, b);
         tick(stack, level, entity);
 
-        if (!level.isClientSide) {
+        if (!entity.isAlive()) {
+            SimpleVoiceRadio.LOGGER.debug("player is dying");
+        }
 
+        if (!level.isClientSide) {
             if (entity instanceof Player player) {
                 CompoundTag tag = stack.getOrCreateTag();
                 String frequency = tag.getString("frequency");

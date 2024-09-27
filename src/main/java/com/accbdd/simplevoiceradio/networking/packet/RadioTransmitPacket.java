@@ -4,10 +4,11 @@ import java.util.function.Supplier;
 
 import com.accbdd.simplevoiceradio.SimpleVoiceRadio;
 import com.accbdd.simplevoiceradio.networking.Packeter;
+import com.accbdd.simplevoiceradio.radio.capability.PlayerTransmitFrequency;
 import com.accbdd.simplevoiceradio.radio.capability.PlayerTransmitFrequencyProvider;
 import com.accbdd.simplevoiceradio.registry.ItemRegistry;
 import com.accbdd.simplevoiceradio.registry.SoundRegistry;
-import com.accbdd.simplevoiceradio.registry.item.RadioItem;
+import com.accbdd.simplevoiceradio.item.RadioItem;
 
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.resources.ResourceLocation;
@@ -76,9 +77,7 @@ public record RadioTransmitPacket(boolean transmitting, Enum<RadioTransmitPacket
 
             String frequency = radio.getOrCreateTag().getString("frequency");
             if (start && !player.getCooldowns().isOnCooldown(radioItem)) {
-                player.getCapability(PlayerTransmitFrequencyProvider.PLAYER_TRANSMIT_FREQUENCY).ifPresent(freq -> {
-                    freq.setFrequency(frequency);
-                });
+                player.getCapability(PlayerTransmitFrequencyProvider.PLAYER_TRANSMIT_FREQUENCY).ifPresent(freq -> freq.setFrequency(frequency));
                 level.playSound(
                     null, player.blockPosition(),
                     SoundRegistry.RADIO_OPEN.get(),
@@ -86,9 +85,7 @@ public record RadioTransmitPacket(boolean transmitting, Enum<RadioTransmitPacket
                     1f,1f
                 );
             } else {
-                player.getCapability(PlayerTransmitFrequencyProvider.PLAYER_TRANSMIT_FREQUENCY).ifPresent(freq -> {
-                    freq.clearFrequency();
-                });
+                player.getCapability(PlayerTransmitFrequencyProvider.PLAYER_TRANSMIT_FREQUENCY).ifPresent(PlayerTransmitFrequency::clearFrequency);
                 level.playSound(
                     null, player.blockPosition(),
                     SoundRegistry.RADIO_CLOSE.get(),

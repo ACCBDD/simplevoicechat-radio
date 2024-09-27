@@ -11,7 +11,7 @@ import com.accbdd.simplevoiceradio.SimpleVoiceRadio;
 import net.minecraft.world.entity.player.Player;
 
 public class Frequency {
-    private static final List<Frequency> frequencies = new ArrayList<>();
+    public static final List<Frequency> frequencies = new ArrayList<>();
 
     public static final int FREQUENCY_WHOLE_PLACES = 3;
     public static final int FREQUENCY_DECIMAL_PLACES = 2;
@@ -80,7 +80,7 @@ public class Frequency {
 
         SimpleVoiceRadio.LOGGER.info(String.format("removed %s from frequency %s", player, this.frequency));
 
-        if (listeners.size() == 0)
+        if (listeners.isEmpty())
             frequencies.remove(this);
     }
 

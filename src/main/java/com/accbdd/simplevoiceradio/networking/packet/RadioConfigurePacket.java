@@ -6,7 +6,7 @@ import com.accbdd.simplevoiceradio.SimpleVoiceRadio;
 import com.accbdd.simplevoiceradio.networking.Packeter;
 import com.accbdd.simplevoiceradio.radio.Frequency;
 import com.accbdd.simplevoiceradio.registry.ItemRegistry;
-import com.accbdd.simplevoiceradio.registry.item.RadioItem;
+import com.accbdd.simplevoiceradio.item.RadioItem;
 
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.resources.ResourceLocation;

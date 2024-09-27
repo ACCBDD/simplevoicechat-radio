@@ -1,4 +1,4 @@
-package com.accbdd.simplevoiceradio.effect;
+package com.accbdd.simplevoiceradio.radio.effect;
 
 public class LowQualityEffect extends AudioEffect {
     

@@ -1,4 +1,4 @@
-package com.accbdd.simplevoiceradio.effect;
+package com.accbdd.simplevoiceradio.radio.effect;
 
 import java.util.Random;
 

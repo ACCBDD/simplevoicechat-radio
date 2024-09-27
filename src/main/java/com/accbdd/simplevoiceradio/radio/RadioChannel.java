@@ -9,8 +9,8 @@ import java.util.function.Supplier;
 
 import com.accbdd.simplevoiceradio.SimpleVoiceRadioConfig;
 import com.accbdd.simplevoiceradio.SimpleVoiceRadioPlugin;
-import com.accbdd.simplevoiceradio.effect.AudioEffect;
-import com.accbdd.simplevoiceradio.effect.IntermittentEffect;
+import com.accbdd.simplevoiceradio.radio.effect.AudioEffect;
+import com.accbdd.simplevoiceradio.radio.effect.IntermittentEffect;
 
 import de.maxhenkel.voicechat.api.VoicechatConnection;
 import de.maxhenkel.voicechat.api.audiochannel.AudioPlayer;
@@ -30,6 +30,7 @@ public class RadioChannel implements Supplier<short[]> {
     public RadioChannel(Player owner) {
         this(owner.getUUID());
     }
+
     public RadioChannel(UUID owner) {
         this.owner = owner;
 

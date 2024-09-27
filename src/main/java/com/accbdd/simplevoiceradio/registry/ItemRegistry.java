@@ -1,7 +1,7 @@
 package com.accbdd.simplevoiceradio.registry;
 
 import com.accbdd.simplevoiceradio.SimpleVoiceRadio;
-import com.accbdd.simplevoiceradio.registry.item.RadioItem;
+import com.accbdd.simplevoiceradio.item.RadioItem;
 
 import net.minecraft.world.item.CreativeModeTab;
 import net.minecraft.world.item.Item;
