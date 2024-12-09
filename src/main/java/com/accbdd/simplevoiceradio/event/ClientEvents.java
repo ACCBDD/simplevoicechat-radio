@@ -40,7 +40,7 @@ public class ClientEvents {
     public static class ClientForgeEvents {
         @SubscribeEvent
         public static void onKeyInput(InputEvent.Key event) {
-            if(event.getKey() == KeyBinding.ACTIVATE_RADIO_KEY.getKey().getValue()) {
+            if(event.getKey() == KeyBinding.ACTIVATE_RADIO_KEY.getKey().getValue() && Minecraft.getInstance().getConnection() != null) {
                 if(event.getAction() == InputConstants.PRESS) {
                     NetworkingManager.sendToServer(new RadioTransmitPacket(true, RadioTransmitPacket.PacketContext.KEYBIND));
                 } else if(event.getAction() == InputConstants.RELEASE) {
