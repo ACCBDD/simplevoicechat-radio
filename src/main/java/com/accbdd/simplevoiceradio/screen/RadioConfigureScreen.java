@@ -3,6 +3,7 @@ package com.accbdd.simplevoiceradio.screen;
 import net.minecraft.client.gui.components.AbstractButton;
 import net.minecraft.client.gui.narration.NarrationElementOutput;
 import net.minecraft.client.gui.screens.Screen;
+import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.chat.Component;
 import net.minecraft.world.item.ItemStack;
 
@@ -38,7 +39,10 @@ public class RadioConfigureScreen extends Screen {
 
         if(this.minecraft == null) return;
         this.radio = this.minecraft.player.getMainHandItem();
-        this.frequency = this.radio.getOrCreateTag().getString("frequency");
+        CompoundTag tag = radio.getOrCreateTag();
+        if (!tag.contains("frequency") || tag.getString("frequency").isEmpty())
+            tag.putString("frequency", "001.00");
+        this.frequency = tag.getString("frequency");
 
         addRenderableWidget(
             new ChangeButton(this.leftPos, this.topPos, true, this)
